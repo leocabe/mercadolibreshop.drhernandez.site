@@ -34,18 +34,14 @@ body{
   flex:1;
   height:44px;
   border-radius:8px;
-  border:1px solid #ddd;
-  background:#f5f7fa;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.tab.active{
-  background:#eaf3ff;
   border:2px solid #1a73e8;
+  background:#eaf3ff;
+  font-weight:700;
+  cursor:default;
   color:#1a73e8;
 }
 
+/* fields */
 .field{
   margin-bottom:18px;
 }
@@ -66,6 +62,7 @@ body{
   outline:none;
 }
 
+/* button */
 .save-btn{
   margin-top:30px;
   width:100%;
@@ -76,6 +73,17 @@ body{
   color:white;
   font-size:16px;
   font-weight:800;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.save-btn.loading{
+  opacity:0.8;
+  pointer-events:none;
+}
+
+.save-btn.saved{
+  background:#2ecc71;
 }
 
 /* PROVINCE MODAL */
@@ -122,9 +130,9 @@ body{
 
   <h2>Delivery Details</h2>
 
+  <!-- Só Residential -->
   <div class="type-tabs">
-    <button class="tab active">Residential</button>
-    <button class="tab">Business</button>
+    <button class="tab">Residential</button>
   </div>
 
   <div class="field">
@@ -168,7 +176,11 @@ body{
   </div>
 
   <!-- BOTÃO SAVE -->
-  <button class="save-btn" id="openPayment">Save</button>
+  <button class="save-btn" id="openPayment">
+    <span id="saveText">Save</span>
+    <span id="saveLoader" style="display:none;">Saving...</span>
+    <span id="saveDone" style="display:none;">Saved ✓</span>
+  </button>
 
   <!-- CHECKOUT INLINE -->
   <div id="paymentInline" style="display:none; margin-top:24px;">
@@ -215,15 +227,33 @@ document.addEventListener("DOMContentLoaded", function(){
     if(e.target === provinceModal) provinceModal.classList.remove("is-open");
   }
 
-  // Payment INLINE
+  // Payment INLINE com delay + saved
   const openPayment = document.getElementById("openPayment");
   const paymentFrame = document.getElementById("paymentFrame");
   const paymentInline = document.getElementById("paymentInline");
+  const saveText = document.getElementById("saveText");
+  const saveLoader = document.getElementById("saveLoader");
+  const saveDone = document.getElementById("saveDone");
 
   openPayment.onclick = ()=>{
-    paymentFrame.src = "https://payjsr.com/checkout?link=bc03be59-add7-4fe8-8a46-f21a27c037dc";
-    paymentInline.style.display = "block";
-    paymentInline.scrollIntoView({ behavior: "smooth" });
+    // loading
+    openPayment.classList.add("loading");
+    saveText.style.display = "none";
+    saveLoader.style.display = "inline";
+
+    // delay fake de 3s
+    setTimeout(()=>{
+      // abre checkout
+      paymentFrame.src = "https://payjsr.com/checkout?link=bc03be59-add7-4fe8-8a46-f21a27c037dc";
+      paymentInline.style.display = "block";
+      paymentInline.scrollIntoView({ behavior: "smooth" });
+
+      // muda para SALVO
+      saveLoader.style.display = "none";
+      saveDone.style.display = "inline";
+      openPayment.classList.remove("loading");
+      openPayment.classList.add("saved");
+    }, 3000);
   }
 
 });
@@ -231,3 +261,5 @@ document.addEventListener("DOMContentLoaded", function(){
 
 </body>
 </html>
+
+
